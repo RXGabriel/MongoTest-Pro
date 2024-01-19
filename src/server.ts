@@ -2,9 +2,11 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import mustache from 'mustache-express';
 import dotenv from 'dotenv';
+import {mongoConnection} from './database/mongo';
 import mainRoutes from './routes/index';
 
 dotenv.config();
+mongoConnection()
 
 const server = express();
 

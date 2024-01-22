@@ -58,3 +58,23 @@ export const addUserAction = async (req: Request, res: Response) => {
       return res.status(500).send('Erro interno do servidor.');
     }
   };
+
+  export const addAgeAction = async (req: Request, res: Response) => {
+    try {
+        
+        const userId = req.params.id;
+        const user = await UserModel.findById(userId);
+        
+        if (user) {
+            user.age += 1;
+            await user.save();
+            res.redirect('/'); 
+        } else {
+            res.status(404).send('Usuário não encontrado');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erro interno do servidor');
+    }
+};
+

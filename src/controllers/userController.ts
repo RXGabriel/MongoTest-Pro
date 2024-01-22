@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import UserModel from '../models/User';
 
 export const nome = (req: Request, res: Response) => {
     let nome: string = req.query.nome as string;
@@ -30,3 +31,30 @@ export const idadeAction = (req: Request, res: Response) => {
         mostrarIdade
     });
 };
+
+export const addUserAction = async (req: Request, res: Response) => {
+    try {
+      const { firstName, lastName, email, age, interests } = req.body;
+  
+      if (!firstName || !email || !age) {
+        return res.status(400).send('Campos obrigatórios não preenchidos.');
+      }
+  
+      const newUser = new UserModel({
+        name: {
+          firstName,
+          lastName,
+        },
+        email,
+        age,
+        interests: interests ? interests.split(',').map((interest: string) => interest.trim()) : [],
+      });
+
+      await newUser.save();
+      return res.redirect('/');
+  
+    } catch (error) {
+      console.error('Erro ao adicionar novo usuário:', error);
+      return res.status(500).send('Erro interno do servidor.');
+    }
+  };
